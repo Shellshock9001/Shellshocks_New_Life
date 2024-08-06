@@ -1,19 +1,70 @@
 #!/bin/bash
 
-# Update package lists and upgrade existing packages
-sudo apt-get update -y && sudo apt-get upgrade -y
+# I am testing this symlink 
+# cd /opt && sudo git clone https://github.com/threat9/routersploit && sudo chown -R $USER:$USER /opt/routersploit && cd /opt/routersploit && python3 -m venv shellshock_routersploit && source shellshock_routersploit/bin/activate && pip install setuptools future && pip install -r requirements.txt && python3 rsf.py && deactivate && echo '#!/bin/bash\nsource /opt/routersploit/shellshock_routersploit/bin/activate\npython3 /opt/routersploit/rsf.py "$@"\ndeactivate' > /opt/routersploit/rsf && chmod +x /opt/routersploit/rsf && sudo ln -s /opt/routersploit/rsf /usr/local/bin/rsf
+# this will create a wrapper to activate the shellshock_routersploit venv
+# making it executable and allowing you to run rsf.py in any directory
 
-# Install common dependencies, including curl
+# You will have to move into the routersploit directory and activate the venv anytime you want to use it for now
+# source shellshock_routersploit/bin/activate
+# ./rsf.py
+
+echo "Updating package lists..."
+sudo apt-get update
+
+echo "Upgrading existing packages..."
+sudo apt-get upgrade -y
+
 echo "Installing common dependencies..."
-sudo apt-get install libre2-dev libcurl4-openssl-dev libldns-dev libssl-dev python3-dnspython rename xdotool fuse build-essential curl git golang jq python3 snapd wget zlib1g zlib1g-dev ruby-full gcc g++ flex libewf-dev libreadline-dev libsqlite3-dev libncurses5-dev libnl-genl-3-dev pkg-config libpcap-dev libnm-dev libcap-dev python3-setuptools python3-wheel openjdk-17-jdk openjdk-17-jre libxext-dev libxrender-dev libxtst-dev -y
+sudo apt-get install -y \
+    libcurl4-openssl-dev \
+    libre2-dev \
+    jq \
+    ruby-full \
+    zlib1g \
+    libxml2 \
+    libxml2-dev \
+    libxslt-dev \
+    ruby-dev \
+    libgmp-dev \
+    zlib1g-dev \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    python-dev-is-python3 \
+    libldns-dev \
+    python3-dnspython \
+    python3.venv \
+    python3-pip \
+    python3-poetry \
+    python3-setuptools \
+    python3-wheel \
+    docker \
+    git \
+    rename \
+    xdotool \
+    fuse3 \
+    curl \
+    wget \
+    flex \
+    pkg-config \
+    libewf-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libncurses-dev \
+    libnl-genl-3-dev \
+    libpcap-dev \
+    libnm-dev \
+    libcap-dev \
+    libxext-dev \
+    libxrender-dev \
+    libxtst-dev
 
+echo "Cleaning up..."
+sudo apt-get autoremove -y
+sudo apt-get clean
 
-sudo gem install json -v '2.7.2'
-
-sudo gem install bundler
-
-# Update package lists and upgrade existing packages again
-sudo apt-get update -y && sudo apt-get upgrade -y
+echo "Common dependencies installation completed."
 
 echo "Installing golang-go..."
 sudo apt install golang-go -y
@@ -35,14 +86,8 @@ sudo apt install backdoor-factory -y
 # bulk_extractor
 cd /opt && sudo git clone --recurse-submodules https://github.com/simsong/bulk_extractor.git && cd bulk_extractor && sudo chmod +x bootstrap.sh && sudo ./bootstrap.sh && sudo ./configure && sudo make && sudo make install
 
-# commix
-sudo snap install commix -y
-
-# exploitdb
-sudo snap install searchsploit
-
 # set
-sudo apt install set -y
+cd /opt && sudo git clone https://github.com/trustedsec/social-engineer-toolkit/ setoolkit/ && sudo chown -R $USER:$USER /opt/setoolkit && cd /opt/setoolkit && python3 -m venv shellshock_setoolkit && source shellshock_setoolkit/bin/activate && pip install -r requirements.txt || true && deactivate && sudo python3 setup.py install
 
 # sqlmap-dev
 cd /opt && sudo git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
@@ -83,7 +128,7 @@ sudo apt install galleta -y
 sudo apt install guymager -y
 
 # p0f
-sudo apt install p0f -y
+sudo apt-get install p0f -y
 
 # pdf-parser
 pip3 install py-pdf-parser
@@ -100,25 +145,19 @@ sudo apt install beef -y
 cd /opt && sudo git clone --recurse-submodules https://github.com/cobbr/Covenant && cd /opt/Covenant/Covenant && sudo docker build -t covenant .
 
 # Empire
-cd /opt && sudo git clone --recursive https://github.com/BC-SECURITY/Empire.git && cd /opt/Empire && sudo ./setup/checkout-latest-tag.sh && sudo apt install python3-poetry && ./ps-empire install -y
+cd /opt && sudo git clone --recursive https://github.com/BC-SECURITY/Empire.git && cd /opt/Empire && sudo ./setup/checkout-latest-tag.sh && sudo ./ps-empire install -y
 
 # havoc
 cd /opt && sudo git clone https://github.com/HavocFramework/Havoc.git && cd /opt/Havoc && cd teamserver && sudo go mod download golang.org/x/sys && sudo go mod download github.com/ugorji/go && cd .. && sudo make ts-build
-
-# metasploit-framework
-sudo snap install metasploit-framework -y
 
 # osrframework
 cd /opt && sudo pip3 install osrframework && sudo pip3 install osrframework --upgrade
 
 # routersploit
-cd /opt && sudo git clone https://github.com/threat9/routersploit && cd /opt/routersploit && sudo python3 -m pip install -r requirements.txt
+cd /opt && sudo git clone https://github.com/threat9/routersploit && sudo chown -R $USER:$USER /opt/routersploit && cd /opt/routersploit && python3 -m venv shellshock_routersploit && source shellshock_routersploit/bin/activate && pip install setuptools future && pip install -r requirements.txt && python3 rsf.py && deactivate
 
 # sliver
 cd /opt && sudo git clone https://github.com/BishopFox/sliver.git && cd sliver && sudo make
-
-# Zap Proxy
-sudo snap install zaproxy --classic --channel=stable -y
 
 #### Hardware Hacking Tools ####
 
@@ -140,7 +179,7 @@ sudo apt install smali -y
 #### Information Gathering Tools ####
 
 # anslookup
-cd /opt && sudo git clone https://github.com/yassineaboukir/Asnlookup && cd Asnlookup && sudo pip3 install -r requirements.txt
+cd /opt && sudo git clone https://github.com/yassineaboukir/Asnlookup asnlookup/ && sudo chown -R $USER:$USER /opt/asnlookup && cd /opt/asnlookup && python3 -m venv shellshock_asnlookup && source shellshock_asnlookup/bin/activate && pip install -r requirements.txt || true && deactivate
 
 # arp-scan
 sudo apt install arp-scan -y
@@ -169,9 +208,6 @@ sudo apt install dnstracer -y
 # dnswalk
 sudo apt install dnswalk -y
 
-# enum4linux
-sudo snap install enum4linux -y
-
 # ffuf
 sudo apt install ffuf -y
 
@@ -188,7 +224,7 @@ sudo apt install hping3 -y
 cd /opt && sudo go install github.com/tomnomnom/httprobe@latest
 
 # knock.py
-cd /opt && sudo git clone https://github.com/guelfoweb/knock.git && cd knock && sudo pip install .
+sudo apt-get install knockpy -y
 
 # lazys3
 cd /opt && sudo git clone https://github.com/nahamsec/lazys3.git
@@ -227,13 +263,13 @@ go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 sudo apt install parsero -y
 
 # recon-ng
-cd /opt && sudo git clone https://github.com/lanmaster53/recon-ng.git && cd /opt/recon-ng && pip install --upgrade -r REQUIREMENTS && sudo docker build --rm -t recon-ng .
+cd /opt && sudo git clone https://github.com/lanmaster53/recon-ng.git && sudo chown -R $USER:$USER /opt/recon-ng && cd /opt/recon-ng && python3 -m venv shellshock_reconng && source shellshock_reconng/bin/activate && pip install -r REQUIREMENTS && deactivate
 
 # seclist
 cd /opt && sudo git clone https://github.com/danielmiessler/SecLists.git && cd /opt/SecLists/Discovery/DNS && sudo bash -c 'cat dns-Jhaddix.txt | head -n -14 > clean-jhaddix-dns.txt'
 
 # SIPVicious
-sudo apt-get install sipvicious
+sudo apt-get install sipvicious -y
 
 # smbmap
 sudo apt install smbmap -y
@@ -268,7 +304,6 @@ echo 'wireshark-common wireshark-common/install-setuid boolean false' | sudo deb
 # whois
 sudo apt install whois -y
 
-
 #### Password Attacks Tools ####
 
 # john
@@ -291,9 +326,6 @@ sudo apt install ncrack -y
 # radare2
 sudo apt install radare2 -y
 
-# ghidra
-sudo snap install ghidra -y
-
 # cutter
 cd /opt && sudo mkdir cutter && cd /opt/cutter && sudo wget https://github.com/rizinorg/cutter/releases/download/v2.3.4/Cutter-v2.3.4-Linux-x86_64.AppImage && sudo chmod +x Cutter-v2.3.4-Linux-x86_64.AppImage
 
@@ -302,9 +334,6 @@ cd /opt && sudo mkdir cutter && cd /opt/cutter && sudo wget https://github.com/r
 # reaver
 sudo apt install reaver -y
 
-# kismet
-sudo wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key --quiet | gpg --dearmor | sudo tee /usr/share/keyrings/kismet-archive-keyring.gpg >/dev/null && echo 'deb [signed-by=/usr/share/keyrings/kismet-archive-keyring.gpg] https://www.kismetwireless.net/repos/apt/git/noble noble main' | sudo tee /etc/apt/sources.list.d/kismet.list >/dev/null && echo "kismet-core kismet/install-setuid boolean true" | sudo debconf-set-selections && sudo apt update && sudo apt install kismet -y
-
 # aircrack-ng
 sudo apt install aircrack-ng -y
 
@@ -312,9 +341,6 @@ sudo apt install aircrack-ng -y
 sudo apt install wifite -y
 
 #### Web Application Analysis Tools ####
-
-# burpsuite
-sudo snap install burpsuite --classic -y
 
 # nikto
 sudo apt install nikto -y
@@ -326,7 +352,6 @@ cd /opt && sudo git clone https://github.com/wpscanteam/wpscan.git && cd /opt/wp
 
 # tmux
 sudo apt install tmux -y
-
 
 # vim
 sudo apt install vim -y
@@ -341,9 +366,6 @@ sudo apt install htop -y
 
 # dns2tcp
 sudo apt install dns2tcp -y
-
-# docker
-sudo snap install docker -y
 
 # httptunnel
 sudo apt install httptunnel -y
