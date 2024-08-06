@@ -39,7 +39,6 @@ sudo apt-get install -y \
     python3-poetry \
     python3-setuptools \
     python3-wheel \
-    docker \
     git \
     rename \
     xdotool \
