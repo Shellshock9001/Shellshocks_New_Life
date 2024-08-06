@@ -78,6 +78,16 @@ export PATH=$PATH:$(go env GOPATH)/bin
 echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> ~/.bashrc
 source ~/.bashrc
 
+# Install Docker Using APT
+sudo apt update && sudo apt install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && sudo apt update && sudo apt install -y docker-ce docker-ce-cli containerd.io
+
+# Use this command to get the list of active docker containers
+# sudo docker ps -a
+# sudo docker rm "ID"
+# sudo docker rm 45b4d969bcf0
+# You will need this command after installing Covenant to run the docker and access Covenant
+# sudo docker run -it -p 7443:7443 -p 80:80 -p 443:443 --name covenant -v /opt/shellshock/tools/Covenant/Covenant/Data:/app/Data covenant
+
 #### Exploitation Tools ####
 
 # backdoor-factory
