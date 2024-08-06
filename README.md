@@ -397,5 +397,3 @@ This document provides an overview and description of each tool installed by the
 - **sbd**
   - **Description:** Netcat-clone, designed to be portable and offer strong encryption.
   - **Usage:** `sbd example.com 80`
-
-# Installation complete!
