@@ -68,15 +68,18 @@ export PATH=$PATH:$(go env GOPATH)/bin
 echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> ~/.bashrc
 source ~/.bashrc
 
+#Creates a directory for tools to be installed, keeping the tools installed from this script separate from those in the original /opt/shellshock/tools directory.
+sudo mkdir -p /opt/shellshock/tools
+
 # Install Docker Using APT
-sudo apt update && sudo apt install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && sudo apt update && sudo apt install -y docker-ce docker-ce-cli containerd.io
+cd /opt/shellshock/tools && sudo apt update && sudo apt install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && sudo apt update && sudo apt install -y docker-ce docker-ce-cli containerd.io
 
 # Use this command to get the list of active docker containers
 # sudo docker ps -a
 # sudo docker rm "ID"
 # sudo docker rm 45b4d969bcf0
 # You will need this command after installing Covenant to run the docker and access Covenant
-# sudo docker run -it -p 7443:7443 -p 80:80 -p 443:443 --name covenant -v /opt/Covenant/Covenant/Data:/app/Data covenant
+# sudo docker run -it -p 7443:7443 -p 80:80 -p 443:443 --name covenant -v /opt/shellshock/tools/Covenant/Covenant/Data:/app/Data covenant
 
 # Start Havoc
 # Install musl Compiler & Build Binary (From Havoc Root Directory)
@@ -89,7 +92,7 @@ sudo apt update && sudo apt install -y apt-transport-https ca-certificates curl 
 # They will have meaningfull names such as venv shellshock_setoolkit
 
 # I am testing this symlink 
-# cd /opt && sudo git clone https://github.com/threat9/routersploit && sudo chown -R $USER:$USER /opt/routersploit && cd /opt/routersploit && python3 -m venv shellshock_routersploit && source shellshock_routersploit/bin/activate && pip install setuptools future && pip install -r requirements.txt && python3 rsf.py && deactivate && echo '#!/bin/bash\nsource /opt/routersploit/shellshock_routersploit/bin/activate\npython3 /opt/routersploit/rsf.py "$@"\ndeactivate' > /opt/routersploit/rsf && chmod +x /opt/routersploit/rsf && sudo ln -s /opt/routersploit/rsf /usr/local/bin/rsf
+# cd /opt/shellshock/tools && sudo git clone https://github.com/threat9/routersploit && sudo chown -R $USER:$USER /opt/shellshock/tools/routersploit && cd /opt/shellshock/tools/routersploit && python3 -m venv shellshock_routersploit && source shellshock_routersploit/bin/activate && pip install setuptools future && pip install -r requirements.txt && python3 rsf.py && deactivate && echo '#!/bin/bash\nsource /opt/shellshock/tools/routersploit/shellshock_routersploit/bin/activate\npython3 /opt/shellshock/tools/routersploit/rsf.py "$@"\ndeactivate' > /opt/shellshock/tools/routersploit/rsf && chmod +x /opt/shellshock/tools/routersploit/rsf && sudo ln -s /opt/shellshock/tools/routersploit/rsf /usr/local/bin/rsf
 # this will create a wrapper to activate the shellshock_routersploit venv
 # making it executable and allowing you to run rsf.py in any directory
 
@@ -100,51 +103,57 @@ sudo apt update && sudo apt install -y apt-transport-https ca-certificates curl 
 #### Exploitation Tools ####
 
 # backdoor-factory
-sudo apt install backdoor-factory -y
+sudo apt-get install backdoor-factory -y
 
 # bulk_extractor
-cd /opt && sudo git clone --recurse-submodules https://github.com/simsong/bulk_extractor.git && cd bulk_extractor && sudo chmod +x bootstrap.sh && sudo ./bootstrap.sh && sudo ./configure && sudo make && sudo make install
+cd /opt/shellshock/tools && sudo git clone --recurse-submodules https://github.com/simsong/bulk_extractor.git && cd /opt/shellshock/tools/bulk_extractor && sudo chmod +x bootstrap.sh && sudo ./bootstrap.sh && sudo ./configure && sudo make && sudo make install
+
+# commix
+sudo snap install commix
 
 # set
-cd /opt && sudo git clone https://github.com/trustedsec/social-engineer-toolkit/ setoolkit/ && sudo chown -R $USER:$USER /opt/setoolkit && cd /opt/setoolkit && python3 -m venv shellshock_setoolkit && source shellshock_setoolkit/bin/activate && pip install -r requirements.txt || true && deactivate && sudo python3 setup.py install
+cd /opt/shellshock/tools && sudo git clone https://github.com/trustedsec/social-engineer-toolkit/ setoolkit/ && sudo chown -R $USER:$USER /opt/shellshock/tools/setoolkit && cd /opt/shellshock/tools/setoolkit && python3 -m venv shellshock_setoolkit && source shellshock_setoolkit/bin/activate && pip install -r requirements.txt || true && deactivate && sudo python3 setup.py install
 
 # sqlmap-dev
-cd /opt && sudo git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
+cd /opt/shellshock/tools && sudo git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
 
 # thc-ipv6
-sudo apt install thc-ipv6 -y
+sudo apt-get install thc-ipv6 -y
 
 # yersinia
-sudo apt install yersinia -y
+sudo apt-get install yersinia -y
 
 #### Forensics Tools ####
 
 # binwalk
-sudo apt install binwalk -y
+sudo apt-get install binwalk -y
 
 # capstone-tool
-sudo apt install capstone-tool -y
+sudo apt-get install capstone-tool -y
 
 # chntpw
-sudo apt install chntpw -y
+sudo apt-get install chntpw -y
 
 # dc3dd
-sudo apt install dc3dd -y
+sudo apt-get install dc3dd -y
 
 # ddrescue
-sudo apt install gddrescue -y
+sudo apt-get install gddrescue -y
 
 # extundelete
-sudo apt install extundelete -y
+sudo apt-get install extundelete -y
 
 # foremost
-sudo apt install foremost -y
+sudo apt-get install foremost -y
 
 # galleta
-sudo apt install galleta -y
+sudo apt-get install galleta -y
+
+# ghidra
+sudo snap install ghidra
 
 # guymager
-sudo apt install guymager -y
+sudo apt-get install guymager -y
 
 # p0f
 sudo apt-get install p0f -y
@@ -153,109 +162,112 @@ sudo apt-get install p0f -y
 pip3 install py-pdf-parser
 
 # regripper
-sudo apt install regripper -y
+sudo apt-get install regripper -y
 
 #### Frameworks ####
 
 # beef-xss
-sudo apt install beef -y
+sudo apt-get install beef -y
 
 # Covenant
-cd /opt && sudo git clone --recurse-submodules https://github.com/cobbr/Covenant && cd /opt/Covenant/Covenant && sudo docker build -t covenant .
+cd /opt/shellshock/tools && sudo git clone --recurse-submodules https://github.com/cobbr/Covenant && cd /opt/shellshock/tools/Covenant/Covenant && sudo docker build -t covenant .
 
 # Empire
-cd /opt && sudo git clone --recursive https://github.com/BC-SECURITY/Empire.git && cd /opt/Empire && sudo ./setup/checkout-latest-tag.sh && sudo ./ps-empire install -y
+cd /opt/shellshock/tools && sudo git clone --recursive https://github.com/BC-SECURITY/Empire.git && cd /opt/shellshock/tools/Empire && sudo ./setup/checkout-latest-tag.sh && sudo ./ps-empire install -y
 
 # havoc
-cd /opt && sudo git clone https://github.com/HavocFramework/Havoc.git && cd /opt/Havoc && cd teamserver && sudo go mod download golang.org/x/sys && sudo go mod download github.com/ugorji/go && cd .. && sudo make ts-build
+cd /opt/shellshock/tools && sudo git clone https://github.com/HavocFramework/Havoc.git && cd /opt/shellshock/tools/Havoc && cd teamserver && sudo go mod download golang.org/x/sys && sudo go mod download github.com/ugorji/go && cd .. && sudo make ts-build
 
 # osrframework
-cd /opt && sudo pip3 install osrframework && sudo pip3 install osrframework --upgrade
+cd /opt/shellshock/tools && sudo pip3 install osrframework && sudo pip3 install osrframework --upgrade
 
 # routersploit
-cd /opt && sudo git clone https://github.com/threat9/routersploit && sudo chown -R $USER:$USER /opt/routersploit && cd /opt/routersploit && python3 -m venv shellshock_routersploit && source shellshock_routersploit/bin/activate && pip install setuptools future && pip install -r requirements.txt && python3 rsf.py && deactivate
+cd /opt/shellshock/tools && sudo git clone https://github.com/threat9/routersploit && sudo chown -R $USER:$USER /opt/shellshock/tools/routersploit && cd /opt/shellshock/tools/routersploit && python3 -m venv shellshock_routersploit && source shellshock_routersploit/bin/activate && pip install setuptools future && pip install -r requirements.txt && echo "exit" | python3 rsf.py && deactivate
 
 # sliver
-cd /opt && sudo git clone https://github.com/BishopFox/sliver.git && cd sliver && sudo make
+cd /opt/shellshock/tools && sudo git clone https://github.com/BishopFox/sliver.git && cd sliver && sudo make
 
 #### Hardware Hacking Tools ####
 
 # android-sdk
-sudo apt install android-sdk -y
+sudo apt-get install android-sdk -y
 
 # apktool
-sudo apt install apktool -y
+sudo apt-get install apktool -y
 
 # arduino
-sudo apt install arduino -y
+sudo apt-get install arduino -y
 
 # dex2jar
-cd /opt && sudo git clone https://github.com/pxb1988/dex2jar.git
+cd /opt/shellshock/tools && sudo git clone https://github.com/pxb1988/dex2jar.git
 
 # smali
-sudo apt install smali -y
+sudo apt-get install smali -y
 
 #### Information Gathering Tools ####
 
 # anslookup
-cd /opt && sudo git clone https://github.com/yassineaboukir/Asnlookup asnlookup/ && sudo chown -R $USER:$USER /opt/asnlookup && cd /opt/asnlookup && python3 -m venv shellshock_asnlookup && source shellshock_asnlookup/bin/activate && pip install -r requirements.txt || true && deactivate
+cd /opt/shellshock/tools && sudo git clone https://github.com/yassineaboukir/Asnlookup asnlookup/ && sudo chown -R $USER:$USER /opt/shellshock/tools/asnlookup && cd /opt/shellshock/tools/asnlookup && python3 -m venv shellshock_asnlookup && source shellshock_asnlookup/bin/activate && pip install -r requirements.txt || true && deactivate
 
 # arp-scan
-sudo apt install arp-scan -y
+sudo apt-get install arp-scan -y
 
 # bing-ip2hosts
-cd /opt && sudo git clone https://github.com/urbanadventurer/bing-ip2hosts
+cd /opt/shellshock/tools && sudo git clone https://github.com/urbanadventurer/bing-ip2hosts
 
 # dirsearch
-sudo apt install dirsearch -y
+sudo apt-get install dirsearch -y
 
 # dmitry
-sudo apt install dmitry -y
+sudo apt-get install dmitry -y
 
 # dnsenum
-sudo apt install dnsenum -y
+sudo apt-get install dnsenum -y
 
 # dnsmap
-sudo apt install dnsmap -y
+sudo apt-get install dnsmap -y
 
 # dnsrecon
-sudo apt install dnsrecon -y
+sudo apt-get install dnsrecon -y
 
 # dnstracer
-sudo apt install dnstracer -y
+sudo apt-get install dnstracer -y
 
 # dnswalk
-sudo apt install dnswalk -y
+sudo apt-get install dnswalk -y
+
+# enum4linux
+sudo snap install enum4linux
 
 # ffuf
-sudo apt install ffuf -y
+sudo apt-get install ffuf -y
 
 # fierce
-sudo apt install fierce -y
+sudo apt-get install fierce -y
 
 # firewalk
-sudo apt install firewalk -y
+sudo apt-get install firewalk -y
 
 # hping3
-sudo apt install hping3 -y
+sudo apt-get install hping3 -y
 
 # httprobe
-cd /opt && sudo go install github.com/tomnomnom/httprobe@latest
+cd /opt/shellshock/tools && sudo go install github.com/tomnomnom/httprobe@latest
 
 # knock.py
 sudo apt-get install knockpy -y
 
 # lazys3
-cd /opt && sudo git clone https://github.com/nahamsec/lazys3.git
+cd /opt/shellshock/tools && sudo git clone https://github.com/nahamsec/lazys3.git
 
 # lynis
 sudo apt-get install lynis -y
 
 # masscan
-sudo apt install masscan -y
+sudo apt-get install masscan -y
 
 # massdns
-cd /opt && sudo git clone https://github.com/blechschmidt/massdns.git
+cd /opt/shellshock/tools && sudo git clone https://github.com/blechschmidt/massdns.git
 
 # nbtscan-unixwiz
 cd /home/shellshock/tools && sudo git clone https://github.com/resurrecting-open-source-projects/nbtscan/ && cd /home/shellshock/tools/nbtscan && sudo ./autogen.sh && sudo ./configure && sudo make && sudo make install
@@ -264,37 +276,37 @@ cd /home/shellshock/tools && sudo git clone https://github.com/resurrecting-open
 sudo apt-get install net-tools -y
 
 # nmap
-sudo apt install nmap -y
+sudo apt-get install nmap -y
 
 # ntopng
-sudo apt install ntopng -y
+sudo apt-get install ntopng -y
 
 # ntopng-data
-sudo apt install ntopng-data -y
+sudo apt-get install ntopng-data -y
 
 # ntopng-doc
-sudo apt install ntopng-doc -y
+sudo apt-get install ntopng-doc -y
 
 # nuclei
-go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+sudo go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 
 # parsero
-sudo apt install parsero -y
+sudo apt-get install parsero -y
 
 # recon-ng
-cd /opt && sudo git clone https://github.com/lanmaster53/recon-ng.git && sudo chown -R $USER:$USER /opt/recon-ng && cd /opt/recon-ng && python3 -m venv shellshock_reconng && source shellshock_reconng/bin/activate && pip install -r REQUIREMENTS && deactivate
+cd /opt/shellshock/tools && sudo git clone https://github.com/lanmaster53/recon-ng.git && sudo chown -R $USER:$USER /opt/shellshock/tools/recon-ng && cd /opt/shellshock/tools/recon-ng && python3 -m venv shellshock_reconng && source shellshock_reconng/bin/activate && pip install -r REQUIREMENTS && deactivate
 
 # seclist
-cd /opt && sudo git clone https://github.com/danielmiessler/SecLists.git && cd /opt/SecLists/Discovery/DNS && sudo bash -c 'cat dns-Jhaddix.txt | head -n -14 > clean-jhaddix-dns.txt'
+cd /opt/shellshock/tools && sudo git clone https://github.com/danielmiessler/SecLists.git && cd /opt/shellshock/tools/SecLists/Discovery/DNS && sudo bash -c 'cat dns-Jhaddix.txt | head -n -14 > clean-jhaddix-dns.txt'
 
 # SIPVicious
 sudo apt-get install sipvicious -y
 
 # smbmap
-sudo apt install smbmap -y
+sudo apt-get install smbmap -y
 
 # sntop
-sudo apt install sntop -y
+sudo apt-get install sntop -y
 
 # sslyze
 sudo pip3 install --upgrade sslyze
@@ -303,102 +315,108 @@ sudo pip3 install --upgrade sslyze
 go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 
 # sublist3r
-sudo apt install sublist3r -y
+sudo apt-get install sublist3r -y
 
 # teh_s3_bucketeers.git
-cd /opt && sudo git clone https://github.com/tomdev/teh_s3_bucketeers.git
+cd /opt/shellshock/tools && sudo git clone https://github.com/tomdev/teh_s3_bucketeers.git
 
 # unfurl
-cd /opt && sudo go install github.com/tomnomnom/unfurl@latest
+cd /opt/shellshock/tools && sudo go install github.com/tomnomnom/unfurl@latest
 
 # urlcrazy
 sudo mkdir /home/shellshock/tools/ && cd /home/shellshock/tools/ && sudo gem install json colorize async async-dns async-http && sudo git clone https://github.com/urbanadventurer/urlcrazy.git
 
 # wfuzz
-sudo apt install wfuzz -y
+sudo apt-get install wfuzz -y
 
 # wireshark
 echo 'wireshark-common wireshark-common/install-setuid boolean false' | sudo debconf-set-selections && sudo apt update && sudo apt install -y wireshark
 
 # whois
-sudo apt install whois -y
+sudo apt-get install whois -y
 
 #### Password Attacks Tools ####
 
-# john
-sudo apt install john -y
+# john the rippah
+sudo apt-get install john -y
 
 # hashcat
-sudo apt install hashcat -y
+sudo apt-get install hashcat -y
 
 # hydra
-sudo apt install hydra -y
+sudo apt-get install hydra -y
 
 # medusa
-sudo apt install medusa -y
+sudo apt-get install medusa -y
 
 # ncrack
-sudo apt install ncrack -y
+sudo apt-get install ncrack -y
 
 #### Reverse Engineering Tools ####
 
 # radare2
-sudo apt install radare2 -y
+sudo apt-get install radare2 -y
 
 # cutter
-cd /opt && sudo mkdir cutter && cd /opt/cutter && sudo wget https://github.com/rizinorg/cutter/releases/download/v2.3.4/Cutter-v2.3.4-Linux-x86_64.AppImage && sudo chmod +x Cutter-v2.3.4-Linux-x86_64.AppImage
+cd /opt/shellshock/tools && sudo mkdir cutter && cd /opt/shellshock/tools/cutter && sudo wget https://github.com/rizinorg/cutter/releases/download/v2.3.4/Cutter-v2.3.4-Linux-x86_64.AppImage && sudo chmod +x Cutter-v2.3.4-Linux-x86_64.AppImage
 
 #### Wireless Testing Tools ####
 
 # reaver
-sudo apt install reaver -y
+sudo apt-get install reaver -y
 
 # aircrack-ng
-sudo apt install aircrack-ng -y
+sudo apt-get install aircrack-ng -y
 
 # wifite
-sudo apt install wifite -y
+sudo apt-get install wifite -y
 
 #### Web Application Analysis Tools ####
 
+# burp
+cd /opt/shellshock/tools && sudo mkdir burpsuite && cd /opt/shellshock/tools/burpsuite && sudo wget "https://portswigger-cdn.net/burp/releases/download?product=community&version=2024.5.5&type=Linux" -O burpsuite_community_linux.sh && sudo chmod +x burpsuite_community_linux.sh && sudo ./burpsuite_community_linux.sh & sleep 15 && window_id=$(xdotool search --onlyvisible --class install4j-installer 2>/dev/null | head -n 1) && [ -n "$window_id" ] && xdotool windowactivate --sync $window_id && xdotool type --delay 500 "/opt/shellshock/tools/burpsuite" && xdotool key --delay 500 Return && sleep 5 && xdotool key --delay 500 Return && sleep 5 && xdotool key --delay 500 Return && sleep 10 && xdotool key --delay 500 Return && sleep 15 && xdotool key --delay 500 Tab && xdotool key --delay 500 Return || echo "Installer window not found. Please check if the installer is running correctly."
+
 # nikto
-sudo apt install nikto -y
+sudo apt-get install nikto -y
 
 # wpscan
-cd /opt && sudo git clone https://github.com/wpscanteam/wpscan.git && cd /opt/wpscan && sudo bundle install --without test && sudo gem install wpscan
+cd /opt/shellshock/tools && sudo git clone https://github.com/wpscanteam/wpscan.git && cd /opt/shellshock/tools/wpscan && sudo bundle install --without test && sudo gem install wpscan
+
+# zap
+sudo snap install zaproxy --classic --channel=stable
 
 #### Miscellaneous Tools ####
 
 # tmux
-sudo apt install tmux -y
+sudo apt-get install tmux -y
 
 # vim
-sudo apt install vim -y
+sudo apt-get install vim -y
 
 # nano
-sudo apt install nano -y
+sudo apt-get install nano -y
 
 # htop
-sudo apt install htop -y
+sudo apt-get install htop -y
 
 #### Maintaining Access Tools ####
 
 # dns2tcp
-sudo apt install dns2tcp -y
+sudo apt-get install dns2tcp -y
 
 # httptunnel
-sudo apt install httptunnel -y
+sudo apt-get install httptunnel -y
 
 # nishang
-cd /opt && sudo git clone https://github.com/samratashok/nishang.git && echo 'export PATH=\"$PATH:/opt/nishang\"' >> ~/.bashrc && source ~/.bashrc
+cd /opt/shellshock/tools && sudo git clone https://github.com/samratashok/nishang.git && echo 'export PATH=\"$PATH:/opt/shellshock/tools/nishang\"' >> ~/.bashrc && source ~/.bashrc
 
 # polenum
-sudo apt install polenum -y
+sudo apt-get install polenum -y
 
 # pwnat
-cd /opt && sudo git clone https://github.com/samyk/pwnat.git && cd /opt/pwnat && sudo make
+cd /opt/shellshock/tools && sudo git clone https://github.com/samyk/pwnat.git && cd /opt/shellshock/tools/pwnat && sudo make
 
 # sbd
-sudo apt install sbd -y
+sudo apt-get install sbd -y
 
 echo "Installation complete!"
