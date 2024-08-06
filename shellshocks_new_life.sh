@@ -87,6 +87,13 @@ sudo apt update && sudo apt install -y apt-transport-https ca-certificates curl 
 # You will need this command after installing Covenant to run the docker and access Covenant
 # sudo docker run -it -p 7443:7443 -p 80:80 -p 443:443 --name covenant -v /opt/Covenant/Covenant/Data:/app/Data covenant
 
+# Start Havoc
+# Install musl Compiler & Build Binary (From Havoc Root Directory)
+# make ts-build
+
+# Run the teamserver
+# sudo ./havoc server --profile ./profiles/havoc.yaotl -v --debug
+
 #### Exploitation Tools ####
 
 # backdoor-factory
