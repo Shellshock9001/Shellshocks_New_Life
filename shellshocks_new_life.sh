@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# I am testing this symlink 
-# cd /opt && sudo git clone https://github.com/threat9/routersploit && sudo chown -R $USER:$USER /opt/routersploit && cd /opt/routersploit && python3 -m venv shellshock_routersploit && source shellshock_routersploit/bin/activate && pip install setuptools future && pip install -r requirements.txt && python3 rsf.py && deactivate && echo '#!/bin/bash\nsource /opt/routersploit/shellshock_routersploit/bin/activate\npython3 /opt/routersploit/rsf.py "$@"\ndeactivate' > /opt/routersploit/rsf && chmod +x /opt/routersploit/rsf && sudo ln -s /opt/routersploit/rsf /usr/local/bin/rsf
-# this will create a wrapper to activate the shellshock_routersploit venv
-# making it executable and allowing you to run rsf.py in any directory
-
-# You will have to move into the routersploit directory and activate the venv anytime you want to use it for now
-# source shellshock_routersploit/bin/activate
-# ./rsf.py
-
 echo "Updating package lists..."
 sudo apt-get update
 
@@ -93,6 +84,18 @@ sudo apt update && sudo apt install -y apt-transport-https ca-certificates curl 
 
 # Run the teamserver
 # sudo ./havoc server --profile ./profiles/havoc.yaotl -v --debug
+
+# Certain python scripts such as routersploit, knock.py and recon-ng required virtual enviornments variables to run each time
+# They will have meaningfull names such as venv shellshock_setoolkit
+
+# I am testing this symlink 
+# cd /opt && sudo git clone https://github.com/threat9/routersploit && sudo chown -R $USER:$USER /opt/routersploit && cd /opt/routersploit && python3 -m venv shellshock_routersploit && source shellshock_routersploit/bin/activate && pip install setuptools future && pip install -r requirements.txt && python3 rsf.py && deactivate && echo '#!/bin/bash\nsource /opt/routersploit/shellshock_routersploit/bin/activate\npython3 /opt/routersploit/rsf.py "$@"\ndeactivate' > /opt/routersploit/rsf && chmod +x /opt/routersploit/rsf && sudo ln -s /opt/routersploit/rsf /usr/local/bin/rsf
+# this will create a wrapper to activate the shellshock_routersploit venv
+# making it executable and allowing you to run rsf.py in any directory
+
+# You will have to move into the routersploit directory and activate the venv anytime you want to use it for now
+# source shellshock_routersploit/bin/activate
+# ./rsf.py
 
 #### Exploitation Tools ####
 
