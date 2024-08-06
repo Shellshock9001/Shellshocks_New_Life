@@ -86,7 +86,7 @@ sudo apt update && sudo apt install -y apt-transport-https ca-certificates curl 
 # sudo docker rm "ID"
 # sudo docker rm 45b4d969bcf0
 # You will need this command after installing Covenant to run the docker and access Covenant
-# sudo docker run -it -p 7443:7443 -p 80:80 -p 443:443 --name covenant -v /opt/shellshock/tools/Covenant/Covenant/Data:/app/Data covenant
+# sudo docker run -it -p 7443:7443 -p 80:80 -p 443:443 --name covenant -v /opt/Covenant/Covenant/Data:/app/Data covenant
 
 #### Exploitation Tools ####
 
