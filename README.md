@@ -365,7 +365,6 @@ sleep 15
 window_id=$(xdotool search --onlyvisible --class install4j-installer 2>/dev/null | head -n 1)
 [ -n "$window_id" ] && xdotool windowactivate --sync $window_id && xdotool type --delay 500 "/opt/shellshock/tools/burpsuite" && xdotool key --delay 500 Return && sleep 5 && xdotool key --delay 500 Return && sleep 5 && xdotool key --delay 500 Return && sleep 10 && xdotool key --delay 500 Return && sleep 15 && xdotool key --delay 500 Tab && xdotool key --delay 500 Return || echo "Installer window not found. Please check if the installer is running correctly."
 ``` 
-  - 
 - **nikto**
   - **Description:** A web server scanner which performs comprehensive tests against web servers.
   - **Usage:** `nikto -h example.com`
