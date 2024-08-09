@@ -1,10 +1,94 @@
 #!/bin/bash
 
+# Sweet Tunes to listen to while everything installs
+# This will open a headless YouTube player. Playing songs in the background without interrupting any active windows
+# If you don't like the music, you can easily change it.
+# Just paste new YouTube links in the array of YouTube video URLs
+sudo apt-get install mpv -y
+
+# Store the list of YouTube videos in an array
+YouTube_Videos=(
+  "https://www.youtube.com/watch?v=1OrNS2zbTZg"
+  "https://www.youtube.com/watch?v=C3GouGa0noM"
+  "https://www.youtube.com/watch?v=D818z-7BzuA"
+  "https://www.youtube.com/watch?v=vpCTMddpQNs&list=PLjpNA1ed0KpUkW9BdxBCemsexf2ILTCpM&index=42"
+)
+
+# Create a temporary playlist file
+shellshocks_playlist=$(mktemp /tmp/shellshocks_playlist.XXXXXX)
+
+# Write the YouTube video URLs to the playlist file
+for video in "${YouTube_Videos[@]}"; do
+  echo "$video" >> "$shellshocks_playlist"
+done
+
+# Play the playlist in the background
+mpv --no-video --quiet --cache=yes --cache-secs=25 --demuxer-readahead-secs=20 --volume=60 --playlist="$shellshocks_playlist" &
+
+sleep 5
 echo "Updating package lists..."
 sudo apt-get update
 
 echo "Upgrading existing packages..."
 sudo apt-get upgrade -y
+
+# Install GNOME Tweak Tool
+echo "Installing GNOME Tweak Tool..."
+sudo apt-get install gnome-tweak-tool -y
+
+# Set Interface Text size to System-ui 15
+echo "Setting Desktop Interface System-ui 15..."
+gsettings set org.gnome.desktop.interface font-name 'System-ui 15'
+
+# Set Document Text size to System-ui 15
+echo "Setting Interface Text System-ui 15..."
+gsettings set org.gnome.desktop.interface document-font-name 'System-ui 15'
+
+# Set Monospace Text size to System-ui 15
+echo "Setting Monospace Text size to System-ui 15..."
+gsettings set org.gnome.desktop.interface monospace-font-name 'System-ui 15'
+
+# Set Scaling Factor to 1.10
+echo "Setting scaling factor to 1.10..."
+gsettings set org.gnome.desktop.interface text-scaling-factor 1.10
+
+echo "Font sizes and scaling factor have been updated."
+
+# Checks to see if Sublime Text exists. If not then it will install it.
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+if command_exists subl; then
+    echo "Sublime Text is already installed."
+else
+    echo "Sublime Text is not installed. Installing now..."
+
+    # Ensure apt is set up to work with https sources
+    sudo apt-get install apt-transport-https -y
+
+    # Install the GPG key
+    wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/sublimehq-archive.gpg > /dev/null
+
+    # Select the channel to use (Stable)
+    echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+
+    # Update apt and install Sublime Text
+    sudo apt-get update
+    sudo apt-get install sublime-text -y
+
+    # Verify the installation
+    if command_exists subl; then
+        echo "Sublime Text installation successful."
+    else
+        echo "Sublime Text installation failed."
+        exit 1
+    fi
+fi
+
+echo "Sublime Text setup complete."
 
 echo "Installing common dependencies..."
 sudo apt-get install -y \
@@ -36,6 +120,7 @@ sudo apt-get install -y \
     fuse3 \
     curl \
     wget \
+    wmctrl \
     flex \
     pkg-config \
     libewf-dev \
